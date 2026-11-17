@@ -27,55 +27,55 @@ const CONFIG = {
   // Para voltar às imagens genéricas online, troque para true.
   USE_GENERIC_CARD_URLS: false,
   CARD_IMAGE_BASE: 'https://deckofcardsapi.com/static/img/',
-  CARD_BACK_URL: '',   // verso das cartas. Vazio = verso EXXO desenhado em SVG. Ex.: 'img/cartas/verso.png'
+  CARD_BACK_URL: 'img/back.png',   // verso das cartas. Vazio = verso EXXO desenhado em SVG. Ex.: 'img/cartas/verso.png'
   CUSTOM_CARD_IMAGES: {
     // ---- Ouros (D) ----
-    'AD': '', // Ás de Ouros
-    '2D': '', // 2 de Ouros
-    '3D': '', // 3 de Ouros
-    '4D': '', // 4 de Ouros
-    '5D': '', // 5 de Ouros
-    '6D': '', // 6 de Ouros
-    '7D': '', // 7 de Ouros (manilha)
-    'QD': '', // Dama de Ouros
-    'JD': '', // Valete de Ouros
-    'KD': '', // Rei de Ouros
+    'AD': 'img/1 diamonds.png', // Ás de Ouros
+    '2D': 'img/2 diamonds.png', // 2 de Ouros
+    '3D': 'img/3 diamonds.png', // 3 de Ouros
+    '4D': 'img/4 diamonds.png', // 4 de Ouros
+    '5D': 'img/5 diamonds.png', // 5 de Ouros
+    '6D': 'img/6 diamonds.png', // 6 de Ouros
+    '7D': 'img/7 diamonds.png', // 7 de Ouros (manilha)
+    'QD': 'img/queen diamonds.png', // Dama de Ouros
+    'JD': 'img/jack diamonds.png', // Valete de Ouros
+    'KD': 'img/king diamonds.png', // Rei de Ouros
 
     // ---- Espadas (S) ----
-    'AS': '', // Ás de Espadas (manilha)
-    '2S': '', // 2 de Espadas
-    '3S': '', // 3 de Espadas
-    '4S': '', // 4 de Espadas
-    '5S': '', // 5 de Espadas
-    '6S': '', // 6 de Espadas
-    '7S': '', // 7 de Espadas
-    'QS': '', // Dama de Espadas
-    'JS': '', // Valete de Espadas
-    'KS': '', // Rei de Espadas
+    'AS': 'img/1 spades.png', // Ás de Espadas (manilha)
+    '2S': 'img/2 spades.png', // 2 de Espadas
+    '3S': 'img/3 spades.png', // 3 de Espadas
+    '4S': 'img/4 spades.png', // 4 de Espadas
+    '5S': 'img/5 spades.png', // 5 de Espadas
+    '6S': 'img/6 spades.png', // 6 de Espadas
+    '7S': 'img/7 spades.png', // 7 de Espadas
+    'QS': 'img/queen spades.png', // Dama de Espadas
+    'JS': 'img/jack spades.png', // Valete de Espadas
+    'KS': 'img/king spades.png', // Rei de Espadas
 
     // ---- Copas (H) ----
-    'AH': '', // Ás de Copas
-    '2H': '', // 2 de Copas
-    '3H': '', // 3 de Copas
-    '4H': '', // 4 de Copas
-    '5H': '', // 5 de Copas
-    '6H': '', // 6 de Copas
-    '7H': '', // 7 de Copas (manilha)
-    'QH': '', // Dama de Copas
-    'JH': '', // Valete de Copas
-    'KH': '', // Rei de Copas
+    'AH': 'img/1 hearts.png', // Ás de Copas
+    '2H': 'img/2 hearts.png', // 2 de Copas
+    '3H': 'img/3 hearts.png', // 3 de Copas
+    '4H': 'img/4 hearts.png', // 4 de Copas
+    '5H': 'img/5 hearts.png', // 5 de Copas
+    '6H': 'img/6 hearts.png', // 6 de Copas
+    '7H': 'img/7 hearts.png', // 7 de Copas (manilha)
+    'QH': 'img/queen hearts.png', // Dama de Copas
+    'JH': 'img/jack hearts.png', // Valete de Copas
+    'KH': 'img/king hearts.png', // Rei de Copas
 
     // ---- Paus (C) ----
-    'AC': '', // Ás de Paus
-    '2C': '', // 2 de Paus
-    '3C': '', // 3 de Paus
-    '4C': '', // 4 de Paus (manilha, a mais forte)
-    '5C': '', // 5 de Paus
-    '6C': '', // 6 de Paus
-    '7C': '', // 7 de Paus
-    'QC': '', // Dama de Paus
-    'JC': '', // Valete de Paus
-    'KC': '', // Rei de Paus
+    'AC': 'img/1 cubs.png', // Ás de Paus
+    '2C': 'img/2 cubs.png', // 2 de Paus
+    '3C': 'img/3 cubs.png', // 3 de Paus
+    '4C': 'img/4 cubs.png', // 4 de Paus (manilha, a mais forte)
+    '5C': 'img/5 cubs.png', // 5 de Paus
+    '6C': 'img/6 cubs.png', // 6 de Paus
+    '7C': 'img/7 cubs.png', // 7 de Paus
+    'QC': 'img/queen cubs.png', // Dama de Paus
+    'JC': 'img/jack cubs.png', // Valete de Paus
+    'KC': 'img/king cubs.png', // Rei de Paus
   },
 };
 

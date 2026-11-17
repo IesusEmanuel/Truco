@@ -230,10 +230,10 @@ body {
 .card {
   display: block;
   height: auto;
-  aspect-ratio: var(--card-ratio, 5 / 7); /* mantém o tamanho enquanto a imagem carrega */
-  object-fit: cover;
+  aspect-ratio: var(--card-ratio, 5 / 7); /* provisório enquanto a imagem carrega; o script ajusta à proporção real */
+  object-fit: fill;
   border-radius: 9px;
-  background: var(--cream);
+  background: transparent; /* sem fundo: nada aparece nas bordas arredondadas/transparentes da arte */
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
   user-select: none;
   -webkit-user-drag: none;
