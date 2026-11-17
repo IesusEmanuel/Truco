@@ -30,7 +30,7 @@ const CONFIG = {
   CARD_BACK_URL: 'img/back.png',   // verso das cartas. Vazio = verso EXXO desenhado em SVG. Ex.: 'img/cartas/verso.png'
   CUSTOM_CARD_IMAGES: {
     // ---- Ouros (D) ----
-    'AD': 'img/1 diamonds.png', // Ás de Ouros
+    /* 'AD': 'img/1 diamonds.png', // Ás de Ouros
     '2D': 'img/2 diamonds.png', // 2 de Ouros
     '3D': 'img/3 diamonds.png', // 3 de Ouros
     '4D': 'img/4 diamonds.png', // 4 de Ouros
@@ -75,7 +75,7 @@ const CONFIG = {
     '7C': 'img/7 cubs.png', // 7 de Paus
     'QC': 'img/queen cubs.png', // Dama de Paus
     'JC': 'img/jack cubs.png', // Valete de Paus
-    'KC': 'img/king cubs.png', // Rei de Paus
+    'KC': 'img/king cubs.png', // Rei de Paus */
   },
 };
 
