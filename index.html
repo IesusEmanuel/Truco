@@ -3,184 +3,167 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Truco</title>
+  <title>EXXO Space Truco</title>
+  <link rel="icon" href="img/logo-exxo.png">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <!-- Campo de estrelas animado (sobre a imagem de fundo) -->
+  <canvas id="starfield" class="starfield" aria-hidden="true"></canvas>
+
   <div id="app" class="app">
 
-    <!-- ========== CABEÇALHO / PLACAR ========== -->
-    <header id="game-header" class="header">
-      <h1 id="game-title" class="title">Truco</h1>
+    <!-- ================= COLUNA PRINCIPAL ================= -->
+    <div id="left-column" class="left-column">
 
-      <div id="scoreboard" class="scoreboard">
-        <div id="score-team-us" class="score-box score-box-us">
-          <span id="score-label-us" class="score-label">Nós</span>
-          <span id="score-us" class="score-value">0</span>
+      <header id="game-header" class="header">
+        <img id="logo" class="logo" src="img/logo-exxo.png" alt="EXXO Space Truco">
+      </header>
+
+      <!-- Faixa de informações da mão -->
+      <section id="hand-info" class="hand-info">
+        <div id="info-hand-type" class="chip">
+          <span class="chip-label">Tipo de mão</span>
+          <span id="hand-type" class="chip-value">-</span>
         </div>
-        <span class="score-separator">x</span>
-        <div id="score-team-them" class="score-box score-box-them">
-          <span id="score-label-them" class="score-label">Eles</span>
-          <span id="score-them" class="score-value">0</span>
+        <div id="info-hand-value" class="chip">
+          <span class="chip-label">Valendo</span>
+          <span id="hand-value" class="chip-value">-</span>
         </div>
-      </div>
+        <div id="round-tracker" class="chip chip-rounds">
+          <span class="chip-label">Rodadas</span>
+          <div class="round-item"><span class="round-name">1°</span><div id="round-1" class="round-box"><span id="round-1-result" class="round-result"></span></div></div>
+          <div class="round-item"><span class="round-name">2°</span><div id="round-2" class="round-box"><span id="round-2-result" class="round-result"></span></div></div>
+          <div class="round-item"><span class="round-name">3°</span><div id="round-3" class="round-box"><span id="round-3-result" class="round-result"></span></div></div>
+        </div>
+      </section>
 
-      <button id="btn-new-game" class="btn btn-secondary" type="button">Nova partida</button>
-    </header>
+      <!-- ================= ARENA ================= -->
+      <section id="table" class="table">
 
-    <!-- ========== INFORMAÇÕES DA MÃO ========== -->
-    <section id="hand-info" class="hand-info">
-      <div id="info-hand-number" class="info-item">
-        <span class="info-label">Mão</span>
-        <span id="hand-number" class="info-value">-</span>
-      </div>
-      <div id="info-hand-type" class="info-item">
-        <span class="info-label">Tipo</span>
-        <span id="hand-type" class="info-value">-</span>
-      </div>
-      <div id="info-hand-value" class="info-item">
-        <span class="info-label">Valendo</span>
-        <span id="hand-value" class="info-value info-value-highlight">-</span>
-      </div>
-      <div id="info-manilha" class="info-item">
-        <span class="info-label">Manilha</span>
-        <span id="manilha-info" class="info-value">-</span>
-      </div>
-    </section>
+        <div id="orbit" class="orbit" aria-hidden="true"></div>
 
-    <main id="game-area" class="game-area">
+        <!-- Telemetria da mão (canto superior esquerdo) -->
+        <div id="arena-meta" class="arena-meta">
+          <div id="info-hand-number" class="meta-line"><span class="meta-label">Mão nº</span> <span id="hand-number" class="meta-value">-</span></div>
+          <div id="info-manilha" class="meta-line"><span class="meta-label">Manilhas</span> <span id="manilha-info" class="meta-value">-</span></div>
+        </div>
 
-      <div id="left-column" class="left-column">
+        <div id="vira-area" class="vira-area">
+          <span class="area-label">Vira</span>
+          <div id="vira-slot" class="vira-slot"></div>
+        </div>
 
-        <!-- ========== MESA ========== -->
-        <section id="table" class="table">
+        <div id="player-2" class="player player-top">
+          <div id="hand-2" class="player-hand"></div>
+          <div id="name-2" class="player-name">Parceiro</div>
+        </div>
 
-          <div id="vira-area" class="vira-area">
-            <span class="area-label">Vira</span>
-            <div id="vira-slot" class="vira-slot"></div>
+        <div id="player-1" class="player player-left">
+          <div id="name-1" class="player-name">Adversário 1</div>
+          <div id="hand-1" class="player-hand"></div>
+        </div>
+
+        <div id="center-area" class="center-area">
+          <div id="played-area" class="played-area">
+            <div id="played-2" class="played-slot played-top"></div>
+            <div id="played-1" class="played-slot played-left"></div>
+            <div id="played-3" class="played-slot played-right"></div>
+            <div id="played-0" class="played-slot played-bottom"></div>
           </div>
+        </div>
 
-          <div id="player-2" class="player player-top">
-            <div id="name-2" class="player-name">Parceiro</div>
-            <div id="hand-2" class="player-hand"></div>
-          </div>
+        <div id="player-3" class="player player-right">
+          <div id="name-3" class="player-name">Adversário 2</div>
+          <div id="hand-3" class="player-hand"></div>
+        </div>
 
-          <div id="player-1" class="player player-left">
-            <div id="name-1" class="player-name">Adversário 1</div>
-            <div id="hand-1" class="player-hand"></div>
-          </div>
+        <div id="player-0" class="player player-bottom">
+          <div id="name-0" class="player-name">Você</div>
+          <div id="hand-0" class="player-hand"></div>
+        </div>
 
-          <div id="center-area" class="center-area">
-            <div id="played-area" class="played-area">
-              <div id="played-2" class="played-slot played-top"></div>
-              <div id="played-1" class="played-slot played-left"></div>
-              <div id="played-3" class="played-slot played-right"></div>
-              <div id="played-0" class="played-slot played-bottom"></div>
-            </div>
-          </div>
+        <div id="announce" class="announce" aria-live="polite"></div>
+      </section>
 
-          <div id="player-3" class="player player-right">
-            <div id="name-3" class="player-name">Adversário 2</div>
-            <div id="hand-3" class="player-hand"></div>
-          </div>
-
-          <div id="player-0" class="player player-bottom">
-            <div id="name-0" class="player-name">Você</div>
-            <div id="hand-0" class="player-hand"></div>
-          </div>
-
-          <!-- Cenário 3D: trilho de madeira, baralho e dedão -->
-          <div id="table-rail" class="table-rail"></div>
-          <div id="deck" class="deck"></div>
-          <div id="thumb" class="thumb" aria-hidden="true">
-            <svg viewBox="0 0 120 210" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="skin" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#f3c9aa"/>
-                  <stop offset="0.6" stop-color="#e0a984"/>
-                  <stop offset="1" stop-color="#c78a66"/>
-                </linearGradient>
-              </defs>
-              <path d="M14 210 C8 155 16 98 38 62 C52 38 82 34 96 54 C112 78 116 146 108 210 Z" fill="url(#skin)"/>
-              <path d="M38 62 C52 38 82 34 96 54" fill="none" stroke="#b97e5d" stroke-width="2" opacity="0.6"/>
-              <path d="M42 64 C46 44 76 40 86 58 C92 72 87 90 72 94 C56 98 40 84 42 64 Z" fill="#f8e0d0" stroke="#b97e5d" stroke-width="2"/>
-              <ellipse cx="62" cy="58" rx="13" ry="7" fill="#ffffff" opacity="0.55" transform="rotate(-18 62 58)"/>
-              <path d="M30 150 C55 160 80 160 104 150" fill="none" stroke="#b97e5d" stroke-width="2" opacity="0.5"/>
-              <path d="M26 176 C55 188 82 188 108 176" fill="none" stroke="#b97e5d" stroke-width="2" opacity="0.4"/>
-            </svg>
-          </div>
-
-          <div id="announce" class="announce" aria-live="polite"></div>
-        </section>
-
-        <!-- ========== CONTROLES ========== -->
-        <section id="controls" class="controls">
+      <!-- ================= CONTROLES ================= -->
+      <section id="controls" class="controls">
+        <div id="message-bar" class="message-bar">
+          <span id="turn-dot" class="turn-dot"></span>
           <div id="message" class="message">Bem-vindo ao Truco!</div>
+        </div>
 
-          <div id="raise-panel" class="control-panel raise-panel">
-            <button id="btn-raise" class="btn btn-primary" type="button">Pedir Truco!</button>
+        <div id="raise-panel" class="control-panel raise-panel">
+          <button id="btn-raise" class="btn btn-primary btn-block" type="button">Pedir Truco</button>
+        </div>
+
+        <div id="response-panel" class="control-panel response-panel" hidden>
+          <p id="response-text" class="panel-text"></p>
+          <div class="button-row">
+            <button id="btn-accept" class="btn btn-primary" type="button">Aceitar</button>
+            <button id="btn-counter" class="btn btn-accent" type="button">Aumentar</button>
+            <button id="btn-run" class="btn btn-danger" type="button">Correr</button>
           </div>
+        </div>
 
-          <div id="response-panel" class="control-panel response-panel" hidden>
-            <p id="response-text" class="panel-text"></p>
-            <div class="button-row">
-              <button id="btn-accept" class="btn btn-primary" type="button">Aceitar</button>
-              <button id="btn-counter" class="btn btn-accent" type="button">Aumentar</button>
-              <button id="btn-run" class="btn btn-danger" type="button">Correr</button>
-            </div>
+        <div id="ten-panel" class="control-panel ten-panel" hidden>
+          <p id="ten-text" class="panel-text"></p>
+          <div class="button-row">
+            <button id="btn-ten-play" class="btn btn-primary" type="button">Jogar (vale 4)</button>
+            <button id="btn-ten-run" class="btn btn-danger" type="button">Correr</button>
           </div>
+        </div>
 
-          <div id="ten-panel" class="control-panel ten-panel" hidden>
-            <p id="ten-text" class="panel-text"></p>
-            <div class="button-row">
-              <button id="btn-ten-play" class="btn btn-primary" type="button">Jogar (vale 4)</button>
-              <button id="btn-ten-run" class="btn btn-danger" type="button">Correr</button>
-            </div>
+        <div id="end-panel" class="control-panel end-panel" hidden>
+          <p id="end-text" class="panel-text"></p>
+          <div class="button-row">
+            <button id="btn-next-hand" class="btn btn-primary" type="button">Próxima mão</button>
           </div>
+        </div>
+      </section>
+    </div>
 
-          <div id="end-panel" class="control-panel end-panel" hidden>
-            <p id="end-text" class="panel-text"></p>
-            <div class="button-row">
-              <button id="btn-next-hand" class="btn btn-primary" type="button">Próxima mão</button>
-            </div>
+    <!-- ================= COLUNA LATERAL ================= -->
+    <aside id="side-panel" class="side-panel">
+
+      <button id="btn-new-game" class="btn btn-primary btn-new" type="button">Nova partida</button>
+
+      <details id="history-section" class="side-section" open>
+        <summary class="panel-title">Registro das mãos</summary>
+        <div id="history-list" class="history-list"></div>
+      </details>
+
+      <details id="log-section" class="side-section" open>
+        <summary class="panel-title">Eventos da mão</summary>
+        <ul id="event-log" class="event-log"></ul>
+      </details>
+
+      <section id="scoreboard" class="scoreboard">
+        <h2 id="score-title" class="score-title">Placar</h2>
+        <div class="score-row">
+          <div id="score-team-us" class="score-box score-box-us">
+            <span id="score-label-us" class="score-label">Nós</span>
+            <span id="score-us" class="score-value">0</span>
           </div>
-        </section>
-      </div>
-
-      <!-- ========== PAINEL LATERAL ========== -->
-      <aside id="side-panel" class="side-panel">
-
-        <section id="round-tracker" class="round-tracker">
-          <h2 class="panel-title">Rodadas</h2>
-          <div class="round-row">
-            <div id="round-1" class="round-box"><span class="round-name">1ª</span><span id="round-1-result" class="round-result">-</span></div>
-            <div id="round-2" class="round-box"><span class="round-name">2ª</span><span id="round-2-result" class="round-result">-</span></div>
-            <div id="round-3" class="round-box"><span class="round-name">3ª</span><span id="round-3-result" class="round-result">-</span></div>
+          <span class="score-separator">X</span>
+          <div id="score-team-them" class="score-box score-box-them">
+            <span id="score-label-them" class="score-label">Eles</span>
+            <span id="score-them" class="score-value">0</span>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <details id="log-section" class="side-section" open>
-          <summary class="panel-title">Eventos da mão</summary>
-          <ul id="event-log" class="event-log"></ul>
-        </details>
-
-        <details id="history-section" class="side-section">
-          <summary class="panel-title">Registro das mãos</summary>
-          <div id="history-list" class="history-list"></div>
-        </details>
-
-        <details id="assumptions-section" class="side-section">
-          <summary class="panel-title">Regras assumidas</summary>
-          <ul id="assumptions-list" class="assumptions-list">
-            <li>Baralho de 40 cartas (sem 8, 9 e 10), 4 jogadores em 2 duplas.</li>
-            <li>Ordem das cartas comuns (fraca para forte): 4, 5, 6, 7, Q, J, K, A, 2, 3. Naipe não desempata: mesma carta empata.</li>
-            <li>Manilhas fixas, da mais forte: 4 de paus, 7 de copas, A de espadas, 7 de ouros.</li>
-            <li>Empate de cartas na rodada: quem jogou primeiro entre as mais fortes abre a próxima.</li>
-            <li>Dá para ajustar o modo de manilha e os tempos em CONFIG, no script.js.</li>
-          </ul>
-        </details>
-      </aside>
-    </main>
+      <details id="assumptions-section" class="side-section">
+        <summary class="panel-title">Regras assumidas</summary>
+        <ul id="assumptions-list" class="assumptions-list">
+          <li>Baralho de 40 cartas (sem 8, 9 e 10), 4 jogadores em 2 duplas.</li>
+          <li>Ordem das cartas comuns (fraca para forte): 4, 5, 6, 7, Q, J, K, A, 2, 3. Naipe não desempata: mesma carta empata.</li>
+          <li>Manilhas fixas, da mais forte: 4 de paus, 7 de copas, A de espadas, 7 de ouros.</li>
+          <li>Empate de cartas na rodada: quem jogou primeiro entre as mais fortes abre a próxima.</li>
+          <li>Dá para ajustar o modo de manilha, os tempos e as imagens em CONFIG, no script.js.</li>
+        </ul>
+      </details>
+    </aside>
   </div>
 
   <script src="script.js"></script>

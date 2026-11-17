@@ -23,12 +23,11 @@ const CONFIG = {
   // 2) Frente: em CUSTOM_CARD_IMAGES, cole o caminho de cada carta entre as aspas.
   //    Campo vazio ('') = usa a carta genérica de CARD_IMAGE_BASE.
   // Chave = <valor><naipe> | Valores: A 2 3 4 5 6 7 Q J K | Naipes: D=Ouros S=Espadas H=Copas C=Paus
+  // Cartas genéricas: por padrão usa as cartas temáticas EXXO desenhadas em SVG (sem internet).
+  // Para voltar às imagens genéricas online, troque para true.
+  USE_GENERIC_CARD_URLS: false,
   CARD_IMAGE_BASE: 'https://deckofcardsapi.com/static/img/',
-  CARD_BACK_URL: 'img/back.png',
-  // ===== IMAGENS DO CENÁRIO (opcionais; vazio = usa o visual desenhado em CSS/SVG) =====
-  TABLE_IMAGE: '',   // ex.: 'img/mesa.jpg'  (foto da mesa, vista de cima)
-  THUMB_IMAGE: '',   // ex.: 'img/dedao.png' (PNG com fundo transparente, dedo apontando para cima)
-
+  CARD_BACK_URL: '',   // verso das cartas. Vazio = verso EXXO desenhado em SVG. Ex.: 'img/cartas/verso.png'
   CUSTOM_CARD_IMAGES: {
     // ---- Ouros (D) ----
     'AD': '', // Ás de Ouros
@@ -146,18 +145,23 @@ function cardLabel(card) {
 }
 
 function cardImageUrl(card) {
-  return CONFIG.CUSTOM_CARD_IMAGES[card.key] || `${CONFIG.CARD_IMAGE_BASE}${card.key}.png`;
+  const custom = CONFIG.CUSTOM_CARD_IMAGES[card.key];
+  if (custom) return custom;
+  return CONFIG.USE_GENERIC_CARD_URLS ? `${CONFIG.CARD_IMAGE_BASE}${card.key}.png` : fallbackCardSvg(card);
 }
 
+// Carta temática EXXO (creme, laranja e azul-noite) desenhada em SVG
 function fallbackCardSvg(card) {
-  const s = suitInfo(card.suit);
-  const color = card.suit === 'D' || card.suit === 'H' ? '#d62828' : '#111111';
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="140"><rect width="100" height="140" rx="8" fill="#fff" stroke="#999"/><text x="50" y="62" font-size="38" font-family="Arial" font-weight="700" text-anchor="middle" fill="${color}">${card.rank}</text><text x="50" y="108" font-size="40" font-family="Arial" text-anchor="middle" fill="${color}">${s.symbol}</text></svg>`;
+  const sy = suitInfo(card.suit).symbol;
+  const c = card.suit === 'D' || card.suit === 'H' ? '#E8450C' : '#0B1623';
+  const corner = `<text x="12" y="27" font-size="20" font-family="Arial,sans-serif" font-weight="700" fill="${c}">${card.rank}</text><text x="12" y="44" font-size="16" font-family="Arial,sans-serif" fill="${c}">${sy}</text>`;
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" width="100" height="140"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBF5E1"/><stop offset="1" stop-color="#E6DBB8"/></linearGradient></defs><rect width="100" height="140" rx="8" fill="url(#g)"/><rect x="4" y="4" width="92" height="132" rx="5" fill="none" stroke="#CDBF93" stroke-width="1"/><ellipse cx="50" cy="72" rx="36" ry="13" fill="none" stroke="${c}" stroke-opacity="0.22" stroke-width="1.3" transform="rotate(-18 50 72)"/>${corner}<text x="50" y="87" font-size="46" font-family="Arial,sans-serif" text-anchor="middle" fill="${c}">${sy}</text><g transform="rotate(180 50 70)">${corner}</g></svg>`;
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 
+// Verso EXXO: planeta com anel e brilho de estrela
 function fallbackBackSvg() {
-  const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="140"><rect width="100" height="140" rx="8" fill="#101c47" stroke="#ff6a00" stroke-width="4"/><text x="50" y="80" font-size="30" font-family="Arial" text-anchor="middle" fill="#ff6a00">T</text></svg>';
+  const svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 140" width="100" height="140"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBF5E1"/><stop offset="1" stop-color="#E6DBB8"/></linearGradient></defs><rect width="100" height="140" rx="8" fill="url(#g)"/><rect x="5" y="5" width="90" height="130" rx="5" fill="none" stroke="#E8450C" stroke-width="1.5"/><circle cx="50" cy="70" r="15" fill="#0B1623"/><ellipse cx="50" cy="70" rx="31" ry="10" fill="none" stroke="#E8450C" stroke-width="4" transform="rotate(-20 50 70)"/><path d="M50 71 a15 15 0 0 0 15 -6" fill="none"/><path d="M80 24 l2 6 6 2 -6 2 -2 6 -2 -6 -6 -2 6 -2z" fill="#E8450C"/><path d="M22 112 l1.4 4 4 1.4 -4 1.4 -1.4 4 -1.4 -4 -4 -1.4 4 -1.4z" fill="#E8450C"/></svg>';
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
 }
 
@@ -174,7 +178,7 @@ function createCardElement(card, faceUp) {
     img.addEventListener('error', () => { img.src = fallbackCardSvg(card); }, { once: true });
   } else {
     img.classList.add('card-back');
-    img.src = CONFIG.CARD_BACK_URL;
+    img.src = CONFIG.CARD_BACK_URL || fallbackBackSvg();
     img.alt = 'Carta virada';
     img.addEventListener('error', () => { img.src = fallbackBackSvg(); }, { once: true });
   }
@@ -348,8 +352,8 @@ function startTurn() {
   render();
   if (h.turn === 0) {
     setMessage(h.type === 'iron'
-      ? 'Mão de ferro: suas cartas estão viradas. Clique em uma para jogá-la.'
-      : 'Sua vez: escolha uma carta para jogar.');
+      ? 'Mão de ferro: jogue uma carta virada'
+      : 'Sua vez');
     return;
   }
   setMessage(`Vez de ${playerName(h.turn)}...`);
@@ -663,6 +667,7 @@ function render() {
 
   renderRoundTracker();
   renderControls();
+  $('message-bar').classList.toggle('is-your-turn', !h.ended && h.phase === 'play' && !h.pending && h.turn === 0);
 }
 
 // A mão só é reconstruída quando as cartas (ou o lado visível) mudam.
@@ -720,8 +725,8 @@ function renderPlayedSlot(p) {
   });
 }
 
-// Inclinação da mesa 3D (mesmo valor de --tilt no CSS)
-const TABLE_TILT = 46;
+// Inclinação das cartas ao pousar (0 = planas; a arena é o espaço aberto)
+const TABLE_TILT = 0;
 
 // A carta voa da mão até a mesa e pousa deitada, acompanhando a perspectiva
 function animatePlay(p, srcRect) {
@@ -796,8 +801,8 @@ function renderRoundTracker() {
     const out = $(`round-${i + 1}-result`);
     box.classList.remove('round-us', 'round-them');
     const r = h.results[i];
-    if (r === undefined) out.textContent = '-';
-    else if (r === 'T') out.textContent = 'Empate';
+    if (r === undefined) out.textContent = '';
+    else if (r === 'T') out.textContent = 'Emp.';
     else {
       out.textContent = TEAM_NAMES[r];
       box.classList.add(r === 0 ? 'round-us' : 'round-them');
@@ -812,7 +817,7 @@ function renderControls() {
   $('raise-panel').hidden = !showRaise;
   if (showRaise) {
     const nv = nextValue(h.value);
-    raiseBtn.textContent = nv ? `Pedir ${CONFIG.RAISE_NAMES[nv]}! (${nv})` : 'Sem aumento disponível';
+    raiseBtn.textContent = nv ? `Pedir ${CONFIG.RAISE_NAMES[nv]}` : 'Sem aumento disponível';
     raiseBtn.disabled = !canRaise(0);
   }
 
@@ -901,18 +906,51 @@ $('btn-next-hand').addEventListener('click', () => {
   else startHand();
 });
 
-// Cenário: imagens opcionais, baralho e dedão
-function initScenery() {
-  const root = document.documentElement;
-  if (CONFIG.TABLE_IMAGE) root.style.setProperty('--table-image', `url('${CONFIG.TABLE_IMAGE}')`);
-  if (CONFIG.THUMB_IMAGE) {
-    const img = document.createElement('img');
-    img.src = CONFIG.THUMB_IMAGE;
-    img.alt = '';
-    $('thumb').replaceChildren(img);
+// Campo de estrelas que cintila sobre a imagem de fundo
+function initStarfield() {
+  const cv = $('starfield');
+  if (!cv) return;
+  const ctx = cv.getContext && cv.getContext('2d');
+  if (!ctx) return; // sem canvas: o fundo estrelado em imagem continua funcionando
+  const reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  let w = 0;
+  let h = 0;
+  let stars = [];
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = cv.clientWidth;
+    h = cv.clientHeight;
+    cv.width = Math.round(w * dpr);
+    cv.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const n = Math.min(220, Math.round((w * h) / 9000));
+    stars = Array.from({ length: n }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      r: Math.random() * 1.3 + 0.3,
+      p: Math.random() * 6.28,
+      s: Math.random() * 1.2 + 0.3,
+      c: Math.random() < 0.16 ? '232,69,12' : '239,230,200',
+    }));
   }
-  $('deck').appendChild(createCardElement(null, false));
+
+  function draw(t) {
+    ctx.clearRect(0, 0, w, h);
+    for (const st of stars) {
+      const a = 0.2 + 0.8 * (0.5 + 0.5 * Math.sin((t / 1000) * st.s + st.p));
+      ctx.fillStyle = `rgba(${st.c},${a.toFixed(2)})`;
+      ctx.beginPath();
+      ctx.arc(st.x, st.y, st.r, 0, 6.283);
+      ctx.fill();
+    }
+    if (!reduce) requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  requestAnimationFrame(draw);
 }
 
-initScenery();
+initStarfield();
 startGame();
