@@ -466,15 +466,29 @@ body {
   body { background-attachment: scroll; }
   .logo { height: 60px; }
   .header { min-height: 60px; }
-  .table { height: 560px; }
-  :root { --card-w: 100px; --card-w-small: 46px; --card-w-played: 64px; }
-  .player-bottom { bottom: -30px; }
-  .player-bottom .card { margin: 0 -16px; }
+  .table { height: 580px; }
+  :root { --card-w: 100px; --card-w-small: 46px; --card-w-played: 58px; }
+
+  /* Sua mão: menos sobreposição para o canto de cada carta continuar visível */
+  .player-bottom { bottom: -26px; }
+  .player-bottom .card { margin: 0 -10px; }
+
   .player-top { top: 26px; }
   .player-top .player-name { left: calc(100% + 14px); }
-  .player-left { left: 10px; }
-  .player-right { right: 10px; }
+
+  /* Adversários: rótulo ABAIXO da mão, longe das cartas jogadas */
+  .player-left, .player-right { flex-direction: column-reverse; gap: 8px; }
+  .player-left { left: 8px; }
+  .player-right { right: 8px; }
   .player-left .card, .player-right .card { margin: -14px 0; }
+  .player-left .player-name, .player-right .player-name { font-size: 0.64rem; padding: 3px 9px; }
+  /* altura fixa da mão lateral: o rótulo não sobe quando restam menos cartas */
+  .player-left .player-hand, .player-right .player-hand { min-height: 118px; justify-content: center; }
+
+  /* Cartas na mesa: menores e com a rodada anterior ainda visível */
+  .played-area { gap: 2px 6px; grid-template-rows: auto 44px auto; }
+  .played-slot .card + .card { margin-left: calc(var(--card-w-played) * -0.66); }
+
   .score-value { font-size: 3.6rem; }
 }
 
@@ -483,6 +497,21 @@ body {
   .chip { padding: 10px 12px; gap: 10px; }
   .btn-block { padding: 20px; letter-spacing: 0.18em; }
   .message { font-size: 0.85rem; letter-spacing: 0.1em; }
+
+  :root { --card-w-played: 48px; --card-w-small: 40px; }
+  .table { height: 560px; }
+
+  /* Sua mão sem sobreposição: as 3 cartas lado a lado, sempre legíveis */
+  .player-bottom .card { width: min(var(--card-w), 27vw); margin: 0 2px; }
+  .player-bottom .card:nth-child(1) { --fan: -3deg; }
+  .player-bottom .card:nth-child(3) { --fan: 3deg; }
+
+  .player-top .card { margin: 0 -8px; }
+  .player-left { left: 4px; }
+  .player-right { right: 4px; }
+  .player-left .card, .player-right .card { margin: -12px 0; }
+  .player-left .player-name, .player-right .player-name { font-size: 0.58rem; padding: 3px 7px; }
+  .played-area { grid-template-rows: auto 36px auto; }
 }
 
 @media (prefers-reduced-motion: reduce) {
