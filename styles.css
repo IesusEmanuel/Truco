@@ -23,6 +23,10 @@
   --font-mono: 'Space Mono', 'Courier New', monospace;
   --font-display: 'Outfit', 'Segoe UI', Arial, sans-serif;
 
+  /* Cursor em estrela: creme normal, laranja sobre o que é clicável */
+  --cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><circle cx='16' cy='16' r='10' fill='%23E8450C' fill-opacity='0.22'/><path d='M16 1C17.2 10.5 21.5 14.8 31 16C21.5 17.2 17.2 21.5 16 31C14.8 21.5 10.5 17.2 1 16C10.5 14.8 14.8 10.5 16 1Z' fill='%23EFE6C8' stroke='%230B1623' stroke-width='1' stroke-linejoin='round'/><circle cx='16' cy='16' r='2' fill='%23FFFFFF'/></svg>") 16 16, auto;
+  --cursor-pointer: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='38' height='38' viewBox='0 0 32 32'><circle cx='16' cy='16' r='11' fill='%23E8450C' fill-opacity='0.3'/><path d='M16 1C17.2 10.5 21.5 14.8 31 16C21.5 17.2 17.2 21.5 16 31C14.8 21.5 10.5 17.2 1 16C10.5 14.8 14.8 10.5 16 1Z' fill='%23E8450C' stroke='%23EFE6C8' stroke-width='1.2' stroke-linejoin='round'/><circle cx='16' cy='16' r='2' fill='%23FFFFFF'/></svg>") 19 19, pointer;
+
   --card-w: 150px;        /* sua mão */
   --card-w-small: 66px;   /* mãos do parceiro e adversários */
   --card-w-played: 88px;  /* cartas na mesa */
@@ -33,7 +37,7 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 [hidden] { display: none !important; }
 
-html { background: #05080f; }
+html { background: #05080f; cursor: var(--cursor); }
 
 body {
   min-height: 100vh;
@@ -242,7 +246,7 @@ body {
 
 /* Sua carta jogável: sobe e se endireita ao passar o mouse */
 .card.playable {
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: translate 0.25s ease, rotate 0.25s ease, scale 0.25s ease, box-shadow 0.25s ease;
 }
 .player-bottom .card.playable:hover {
@@ -380,7 +384,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   transition: color 0.3s ease, border-color 0.3s ease;
 }
 .btn::before {
@@ -395,7 +399,7 @@ body {
 }
 .btn:hover:not(:disabled)::before { transform: scaleX(1); }
 .btn:active:not(:disabled) { transform: translateY(1px); }
-.btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn:disabled { opacity: 0.45; cursor: var(--cursor); }
 .btn:focus-visible { outline: 3px solid var(--cream); outline-offset: 3px; }
 
 .btn-primary { --fill: var(--cream); background: var(--orange); border-color: var(--orange); color: var(--ink); }
@@ -405,7 +409,11 @@ body {
 .btn-danger { --fill: var(--cream); background: transparent; border-color: var(--danger); color: var(--danger); }
 .btn-danger:hover:not(:disabled) { color: var(--ink); border-color: var(--cream); }
 
+.btn-secondary { --fill: var(--cream); background: transparent; border-color: var(--cream-dim); color: var(--cream); }
+.btn-secondary:hover:not(:disabled) { color: var(--ink); border-color: var(--cream); }
+
 .btn-block { width: 100%; padding: 24px; font-size: 1.1rem; letter-spacing: 0.26em; }
+.btn-sound { width: 100%; padding: 14px 20px; font-size: 0.8rem; letter-spacing: 0.22em; }
 .btn-new { width: 100%; padding: 28px 20px; font-size: 1rem; letter-spacing: 0.26em; }
 
 /* ===================== COLUNA LATERAL ===================== */
@@ -422,7 +430,7 @@ body {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--cream);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
 }
 .panel-title::-webkit-details-marker { display: none; }
 .panel-title::before {
@@ -444,7 +452,7 @@ body {
 
 .history-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; max-height: 220px; min-height: 90px; overflow-y: auto; }
 .history-entry { background: rgba(255, 255, 255, 0.04); border-left: 3px solid var(--orange); padding: 6px 10px; font-size: 0.74rem; }
-.history-entry > summary { cursor: pointer; font-weight: 700; color: var(--cream); }
+.history-entry > summary { cursor: var(--cursor-pointer); font-weight: 700; color: var(--cream); }
 .history-body { margin-top: 6px; display: flex; flex-direction: column; gap: 4px; color: var(--cream-dim); }
 
 /* Placar */
@@ -457,8 +465,27 @@ body {
 .score-value { font-family: var(--font-display); font-weight: 500; font-size: 4.6rem; line-height: 1; }
 .score-separator { font-family: var(--font-display); font-weight: 500; font-size: 2.6rem; line-height: 1; }
 
-/* Barras de rolagem temáticas */
-.event-log, .history-list { scrollbar-width: thin; scrollbar-color: var(--orange) transparent; }
+/* ===================== BARRA DE ROLAGEM LARANJA ===================== */
+/* Chrome, Edge, Safari: controle total (trilho escuro, polegar com degradê laranja) */
+@supports selector(::-webkit-scrollbar) {
+  ::-webkit-scrollbar { width: 12px; height: 12px; }
+  ::-webkit-scrollbar-track { background: rgba(5, 10, 20, 0.85); }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--orange-hi), var(--orange));
+    border: 3px solid rgba(5, 10, 20, 0.85);
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: var(--orange-hi); }
+  ::-webkit-scrollbar-corner { background: rgba(5, 10, 20, 0.85); }
+  /* painéis internos: mais finas */
+  .event-log::-webkit-scrollbar, .history-list::-webkit-scrollbar { width: 8px; }
+  .event-log::-webkit-scrollbar-track, .history-list::-webkit-scrollbar-track { background: transparent; }
+  .event-log::-webkit-scrollbar-thumb, .history-list::-webkit-scrollbar-thumb { border-width: 1px; }
+}
+/* Firefox: propriedades padrão */
+@supports not selector(::-webkit-scrollbar) {
+  html, .event-log, .history-list { scrollbar-width: thin; scrollbar-color: var(--orange) rgba(5, 10, 20, 0.85); }
+}
 
 /* ===================== RESPONSIVO ===================== */
 @media (max-width: 1020px) {
